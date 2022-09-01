@@ -4,9 +4,12 @@ namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use App\Models\Question;
 
 class ViewQuestionsTest extends TestCase
 {
+    use RefreshDatabase;
+
     /**
      * @test
      */
@@ -21,5 +24,23 @@ class ViewQuestionsTest extends TestCase
         // 3. 正常返回200
         $test->assertStatus(200);
 
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function user_can_view_a_single_question()
+    {
+        // 1. 创建问题
+        $question = Question::factory()->create();
+
+        // 2. 访问链接
+        $test = $this->get('/questions/' . $question->id);
+
+        // 3. 那么应该看到问题的内容
+        $test->assertStatus(200)
+            ->assertSee($question->title)
+            ->assertSee($question->content);
     }
 }
