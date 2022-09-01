@@ -10,7 +10,7 @@ class ViewQuestionsTest extends TestCase
     /**
      * @test
      */
-    public function user_can_vie_questions()
+    public function user_can_view_questions()
     {
         // 0 抛出异常
         $this->withoutExceptionHandling();
