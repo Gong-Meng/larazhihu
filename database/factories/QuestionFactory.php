@@ -15,7 +15,7 @@ class QuestionFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'user_id' => function () {
@@ -23,7 +23,24 @@ class QuestionFactory extends Factory
             },
             'title' => $this->faker->sentence,
             'content' => $this->faker->text,
-            'published_at' => Carbon::parse('-1 week')
         ];
+    }
+
+    public function published(): QuestionFactory
+    {
+        return $this->state(function () {
+            return [
+                'published_at' => Carbon::parse('-1 week')
+            ];
+        });
+    }
+
+    public function unpublished(): QuestionFactory
+    {
+        return $this->state(function (array $attributes) {
+            return [
+                'published_at' => null
+            ];
+        });
     }
 }
