@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Question;
 use App\Models\User;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -11,6 +12,32 @@ use Tests\TestCase;
 class PostAnswersTest extends TestCase
 {
     use RefreshDatabase;
+
+    /**
+     * @test
+     * @return void
+     */
+    public function guests_may_not_post_an_answer()
+    {
+        // 第一种未认证测试逻辑
+
+//        $this->withExceptionHandling();
+//        $question = Question::factory()->published()->create();
+//
+//        $response = $this->post("/questions/{$question->id}/answers", [
+//            'content' => 'This is an answer.'
+//        ]);
+//
+//        $response->assertStatus(302)->assertRedirect('/login');
+
+        // 第二种未认证测试逻辑
+        $this->expectException(AuthenticationException::class);
+        $question = Question::factory()->published()->create();
+
+        $this->post("/questions/{$question->id}/answers", [
+            'content' => 'This is an answer.'
+        ]);
+    }
 
     /**
      * @test
@@ -27,7 +54,7 @@ class PostAnswersTest extends TestCase
             'content' => 'This is an answer.'
         ]);
         // 我们要看到预期结果
-        $response->assertStatus(201);
+        $response->assertStatus(302);
         $answer = $question->answers()->where('user_id', $user->id)->first();
         $this->assertNotNull($answer);
         $this->assertEquals(1, $question->answers()->count());
@@ -40,7 +67,7 @@ class PostAnswersTest extends TestCase
     public function can_not_post_an_answer_to_an_unpublished_question()
     {
         $question = Question::factory()->unpublished()->create();
-        $user = User::factory()->create();
+        $this->actingAs($user = User::factory()->create());
         $response = $this->withExceptionHandling()
             ->post("/questions/{$question->id}/answers", [
                 'user_id' => $user->id,
@@ -60,7 +87,7 @@ class PostAnswersTest extends TestCase
         $this->withExceptionHandling();
 
         $question = Question::factory()->published()->create();
-        $user = User::factory()->create();
+        $this->actingAs($user = User::factory()->create());
 
         $response = $this->post("/questions/{$question->id}/answers", [
             'user_id' => $user->id,
