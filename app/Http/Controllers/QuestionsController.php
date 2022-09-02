@@ -13,8 +13,9 @@ class QuestionsController extends Controller
 
     }
 
-    public function show(Question $question)
+    public function show($questionsId)
     {
+        $question = Question::whereNotNull('published_at')->findOrFail($questionsId);
         return view('questions.show', compact('question'));
     }
 }

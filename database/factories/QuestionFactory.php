@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Question;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class QuestionFactory extends Factory
@@ -21,7 +22,8 @@ class QuestionFactory extends Factory
                 return User::factory()->create()->id;
             },
             'title' => $this->faker->sentence,
-            'content' => $this->faker->text
+            'content' => $this->faker->text,
+            'published_at' => Carbon::parse('-1 week')
         ];
     }
 }
