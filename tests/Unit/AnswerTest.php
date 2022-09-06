@@ -45,4 +45,27 @@ class AnswerTest extends TestCase
        $this->assertInstanceOf(BelongsTo::class, $answer->owner());
        $this->assertInstanceOf(User::class, $answer->owner);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_vote_up_an_answer()
+    {
+        $this->signIn();
+        $answer = create(Answer::class);
+        $this->assertDatabaseMissing('votes', [
+            'user_id' => auth()->id(),
+            'voted_id' => $answer->id,
+            'voted_type' => get_class($answer),
+            'type' => 'vote_up'
+        ]);
+        $answer->voteUp(auth()->user());
+        $this->assertDatabaseHas('votes', [
+           'user_id' => auth()->id(),
+           'voted_id' => $answer->id,
+           'voted_type' => get_class($answer),
+           'type' => 'vote_up'
+        ]);
+    }
 }
