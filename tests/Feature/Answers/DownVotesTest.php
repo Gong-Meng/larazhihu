@@ -77,4 +77,16 @@ class DownVotesTest extends TestCase
             $answer->refresh()->votes('vote_down')->get()
         );
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_know_it_is_voted_down()
+    {
+        $this->signIn();
+        $answer = create(Answer::class);
+        $this->post("/answers/{$answer->id}/down-votes");
+        $this->assertTrue($answer->refresh()->isVoteDown(auth()->user()));
+    }
 }

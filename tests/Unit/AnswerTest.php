@@ -142,4 +142,38 @@ class AnswerTest extends TestCase
             'voted_type' => get_class($answer)
         ]);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_know_it_is_voted_down()
+    {
+        $user = create(User::class);
+        $answer = create(Answer::class);
+        create(Vote::class, [
+            'user_id' => $user->id,
+            'voted_id' => $answer->id,
+            'voted_type' => get_class($answer),
+            'type' => 'vote_down'
+        ]);
+        $this->assertTrue($answer->refresh()->isVoteDown($user));
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_know_down_votes_count()
+    {
+        $answer = create(Answer::class);
+        $this->signIn();
+        $this->post("/answers/{$answer->id}/down-votes");
+        $this->assertEquals(1, $answer->refresh()->downVotesCount);
+
+        $this->signIn(create(User::class));
+        $this->post("/answers/{$answer->id}/down-votes");
+
+        $this->assertEquals(2, $answer->refresh()->downVotesCount);
+    }
 }

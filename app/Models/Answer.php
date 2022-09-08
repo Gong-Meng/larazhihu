@@ -57,6 +57,11 @@ class Answer extends Model
         return $this->votes('vote_up')->count();
     }
 
+    public function getDownVotesCountAttribute()
+    {
+        return $this->votes('vote_down')->count();
+    }
+
     public function voteDown($user)
     {
         $attributes = ['user_id' => $user->id];
@@ -68,5 +73,13 @@ class Answer extends Model
     public function cancelVoteDown($user)
     {
         $this->votes('vote_down')->where(['user_id' => $user->id, 'type' => 'vote_down'])->delete();
+    }
+
+    public function isVoteDown($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        return (bool)$this->votes('vote_down')->where('user_id', $user->id)->count();
     }
 }
