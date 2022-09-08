@@ -59,7 +59,10 @@ class Answer extends Model
 
     public function voteDown($user)
     {
-        $this->votes('vote_down')->create(['user_id' => $user->id, 'type' => 'vote_down']);
+        $attributes = ['user_id' => $user->id];
+        if (!$this->votes('vote_down')->where($attributes)->exists()) {
+            $this->votes('vote_down')->create(['user_id' => $user->id, 'type' => 'vote_down']);
+        }
     }
 
     public function cancelVoteDown($user)
