@@ -76,7 +76,7 @@ class UpVotesTest extends TestCase
         $this->signIn();
         $answer = create(Answer::class);
         $this->post("/answers/{$answer->id}/up-votes");
-        $this->assertTrue($answer->refresh()->isVoteUp(auth()->user()));
+        $this->assertTrue($answer->refresh()->isVotedUp(auth()->user()));
     }
 
     /**

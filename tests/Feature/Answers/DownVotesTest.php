@@ -87,6 +87,6 @@ class DownVotesTest extends TestCase
         $this->signIn();
         $answer = create(Answer::class);
         $this->post("/answers/{$answer->id}/down-votes");
-        $this->assertTrue($answer->refresh()->isVoteDown(auth()->user()));
+        $this->assertTrue($answer->refresh()->isVotedDown(auth()->user()));
     }
 }

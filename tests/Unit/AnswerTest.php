@@ -100,7 +100,7 @@ class AnswerTest extends TestCase
             'voted_id' => $answer->id,
             'voted_type' => get_class($answer)
         ]);
-        $this->assertTrue($answer->refresh()->isVoteUp($user));
+        $this->assertTrue($answer->refresh()->isVotedUp($user));
     }
 
     /**
@@ -157,7 +157,7 @@ class AnswerTest extends TestCase
             'voted_type' => get_class($answer),
             'type' => 'vote_down'
         ]);
-        $this->assertTrue($answer->refresh()->isVoteDown($user));
+        $this->assertTrue($answer->refresh()->isVotedDown($user));
     }
 
     /**
