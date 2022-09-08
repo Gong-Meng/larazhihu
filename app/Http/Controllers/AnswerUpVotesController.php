@@ -19,4 +19,10 @@ class AnswerUpVotesController extends Controller
         $answer->voteUp(Auth::user());
         return response([], 201);
     }
+
+    public function destroy(Answer $answer)
+    {
+        $answer->cancelVoteUp(Auth::user());
+        return response([], 201);
+    }
 }
