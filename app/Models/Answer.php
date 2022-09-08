@@ -11,7 +11,7 @@ class Answer extends Model
 
     protected $guarded = ['id'];
 
-    public function isBest()
+    public function isBest(): bool
     {
         return $this->id == $this->question->best_answer_id;
     }
@@ -42,5 +42,18 @@ class Answer extends Model
     public function cancelVoteUp($user)
     {
         $this->votes('vote_up')->where(['user_id' => $user->id, 'type' => 'vote_up'])->delete();
+    }
+
+    public function isVoteUp($user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+        return $this->votes('vote_up')->where('user_id', $user->id)->exists();
+    }
+
+    public function getUpVotesCountAttribute()
+    {
+        return $this->votes('vote_up')->count();
     }
 }
