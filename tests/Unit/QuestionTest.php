@@ -67,4 +67,16 @@ class QuestionTest extends TestCase
         $this->assertInstanceOf(BelongsTo::class, $question->creator());
         $this->assertInstanceOf(User::class, $question->creator);
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function can_publish_a_question()
+    {
+        $question = create(Question::class, ['published_at' => null]);
+        $this->assertCount(0, Question::published()->get());
+        $question->publish();
+        $this->assertCount(1, Question::published()->get());
+    }
 }

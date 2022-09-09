@@ -18,6 +18,7 @@ Auth::routes();
 Route::get('/questions', 'QuestionsController@index');
 Route::post('/questions', 'QuestionsController@store')->name('questions.store');
 Route::get('/questions/{question}', 'QuestionsController@show');
+Route::post('/questions/{question}/published-questions', 'PublishedQuestionsController@store')->name('published-questions.store');
 
 Route::post('/questions/{question}/answers', 'AnswersController@store');
 Route::post('/answers/{answer}/best', 'BestAnswersController@store')->name('best-answers.store');
