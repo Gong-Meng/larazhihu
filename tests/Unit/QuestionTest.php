@@ -79,4 +79,16 @@ class QuestionTest extends TestCase
         $question->publish();
         $this->assertCount(1, Question::published()->get());
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function it_can_detect_all_invited_users()
+    {
+        $question = create(Question::class, [
+            'content' => '@Jane @Luke please help me'
+        ]);
+        $this->assertEquals(['Jane','Luke'], $question->invitedUsers());
+    }
 }

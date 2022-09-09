@@ -38,4 +38,11 @@ class Question extends Model
     {
         $this->update(['published_at' => Carbon::now()]);
     }
+
+    public function invitedUsers()
+    {
+        preg_match_all('/@([^\s.]+)/',$this->content,$matches);
+
+        return $matches[1];
+    }
 }
