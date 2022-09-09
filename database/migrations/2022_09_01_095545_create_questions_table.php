@@ -21,6 +21,7 @@ class CreateQuestionsTable extends Migration
             $table->dateTime('published_at')->nullable();
             $table->unsignedInteger('best_answer_id')->nullable();
             $table->timestamps();
+            $table->unsignedInteger('category_id');
         });
     }
 
