@@ -30,3 +30,5 @@ Route::delete('/answers/{answer}/up-votes', 'AnswerUpVotesController@destroy')->
 
 Route::post('/answers/{answer}/down-votes', 'AnswerDownVotesController@store')->name('answer-down-votes.store');
 Route::delete('/answers/{answer}/down-votes', 'AnswerDownVotesController@destroy')->name('answer-down-votes.destroy');
+
+Route::get('/drafts', 'DraftsController@index');

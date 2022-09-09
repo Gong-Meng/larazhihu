@@ -46,7 +46,7 @@ class QuestionsController extends Controller
             'title' => request('title'),
             'content' => request('content')
         ]);
-        return redirect('/questions/' . $question->id)->with('flash', '创建成功！');
+        return redirect('/drafts/' . $question->id)->with('flash', '保存成功！');
     }
 
     public function show($questionsId)

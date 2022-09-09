@@ -91,4 +91,20 @@ class QuestionTest extends TestCase
         ]);
         $this->assertEquals(['Jane','Luke'], $question->invitedUsers());
     }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function questions_without_published_at_date_are_drafts()
+    {
+        $user = create(User::class);
+        $draft1 = create(Question::class, ['user_id' => $user->id, 'published_at' => null]);
+        $draft2 = create(Question::class, ['user_id' => $user->id, 'published_at' => null]);
+        $publishedQuestion = create(Question::class, ['user_id' => $user->id, 'published_at' => Carbon::now()]);
+        $drafts = Question::drafts($user->id)->get();
+        $this->assertTrue($drafts->contains($draft1));
+        $this->assertTrue($drafts->contains($draft2));
+        $this->assertFalse($drafts->contains($publishedQuestion));
+    }
 }
