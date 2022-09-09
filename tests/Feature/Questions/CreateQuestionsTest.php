@@ -4,6 +4,7 @@ namespace Tests\Feature\Questions;
 
 use App\Models\Category;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -92,5 +93,17 @@ class CreateQuestionsTest extends TestCase
         $response = $this->post('/questions', $question->toArray());
         $response->assertRedirect();
         $response->assertSessionHasErrors('category_id');
+    }
+
+    /**
+     * @test
+     * @return void
+     */
+    public function authenticated_users_must_confirm_email_address_before_creating_questions()
+    {
+        $this->signIn(create(User::class, ['email_verified_at' => null]));
+        $question = make(Question::class);
+        $this->post('/questions', $question->toArray())
+            ->assertRedirect(route('verification.notice'));
     }
 }
